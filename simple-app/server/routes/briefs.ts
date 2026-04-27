@@ -2,7 +2,7 @@ import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import { nanoid } from "nanoid";
 import { pb } from "../db";
-import { getClaudeClient } from "../lib/claude";
+import { chatCompletion } from "../lib/llm";
 import { buildBriefPrompt } from "../lib/brief-prompt";
 import type { BriefDetail, Zone } from "../types";
 
@@ -37,28 +37,15 @@ router.post("/generate", generateLimiter, async (req, res) => {
         center_lat: r.center_lat, center_lng: r.center_lng,
         radius_deg: r.radius_deg, maps_link: r.maps_link, note: r.note,
       }));
-      const claude = getClaudeClient();
       const { systemPrompt, userPrompt } = buildBriefPrompt(lat, lng, anchor_name || "Your Location", zones);
-      const message = await claude.messages.create({
-        model: "claude-sonnet-4-6",
-        max_tokens: 2000,
-        system: systemPrompt,
-        messages: [{ role: "user", content: userPrompt }],
-      }, { timeout: 30000 });
-      const content = message.content[0];
-      briefMarkdown = content.type === "text" ? content.text : "";
+      const result = await chatCompletion(systemPrompt, userPrompt, 2000);
+      const jsonMatch = result.text.match(/\{[\s\S]*\}/);
+      briefMarkdown = jsonMatch ? JSON.parse(jsonMatch[0]).brief_markdown : result.text;
       generatedBy = "seeded";
     } else {
-      const claude = getClaudeClient();
       const { systemPrompt, userPrompt } = buildBriefPrompt(lat, lng, anchor_name || "Your Location");
-      const message = await claude.messages.create({
-        model: "claude-sonnet-4-6",
-        max_tokens: 4000,
-        system: systemPrompt,
-        messages: [{ role: "user", content: userPrompt }],
-      }, { timeout: 30000 });
-      const content = message.content[0];
-      const text = content.type === "text" ? content.text : "";
+      const result = await chatCompletion(systemPrompt, userPrompt, 4000);
+      const text = result.text;
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (!jsonMatch) throw new Error("Failed to parse AI response");
       const parsed = JSON.parse(jsonMatch[0]);
@@ -93,8 +80,12 @@ router.post("/generate", generateLimiter, async (req, res) => {
     res.json({ brief });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unknown error";
-    if (message.includes("timeout") || message.includes("ETIMEDOUT")) {
+    console.error("Brief generation error:", message);
+    if (message.includes("timeout") || message.includes("ETIMEDOUT") || message.includes("abort")) {
       return res.status(504).json({ error: "Generation timed out, please try again" });
+    }
+    if (message.includes("not configured")) {
+      return res.status(500).json({ error: "AI service not configured — set OPENROUTER_API_KEY in .env" });
     }
     res.status(500).json({ error: "Failed to generate brief" });
   }

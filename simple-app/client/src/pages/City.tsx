@@ -92,11 +92,11 @@ export default function City() {
       <div className="bg-card border border-border rounded-lg p-6 space-y-3">
         <h2 className="text-lg font-semibold text-foreground">Get Your Brief</h2>
         <p className="text-sm text-muted-foreground">
-          Enter your address in {city.name} for a personalized orientation brief
+          Search any place, hotel, or neighborhood in {city.name}
         </p>
         <SearchBar
           onSearch={handleBriefSearch}
-          placeholder={`Enter your address in ${city.name}...`}
+          placeholder={`Try "my hotel name" or "Taksim Square"...`}
           loading={briefLoading}
           error={briefError}
         />

@@ -42,8 +42,8 @@ export default function Landing() {
 
       <div className="bg-card border border-border rounded-lg p-6 space-y-3">
         <h2 className="text-lg font-semibold text-foreground">Orient Me</h2>
-        <p className="text-sm text-muted-foreground">Enter any address for an instant orientation brief</p>
-        <SearchBar onSearch={handleSearch} placeholder="Enter an address or place..." loading={loading} error={error} />
+        <p className="text-sm text-muted-foreground">Search any address, hotel, landmark, or neighborhood</p>
+        <SearchBar onSearch={handleSearch} placeholder={`Try "Hilton Istanbul" or "Shibuya, Tokyo"...`} loading={loading} error={error} />
         {loading && (
           <p className="text-sm text-muted-foreground animate-pulse">Generating your orientation brief...</p>
         )}
