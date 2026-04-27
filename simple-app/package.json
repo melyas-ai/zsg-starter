@@ -12,7 +12,8 @@
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "dev:db": "./pocketbase serve --dir=./pb_data"
+    "dev:db": "./pocketbase serve --dir=./pb_data",
+    "seed": "tsx server/seed.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",
