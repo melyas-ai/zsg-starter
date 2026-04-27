@@ -13,11 +13,13 @@ A phone-first web app with three standalone experiences — country, city, and a
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
 | Frontend | React + Vite + Tailwind (simple-app) | Existing stack, interactive UI needed |
+| Client router | React Router v6 | Standard, well-documented, supports nested routes |
 | Backend | Express (Node.js, simple-app) | Existing stack, single runtime |
-| Database | PocketBase | Simple, self-contained, real-time capable |
-| Maps | Leaflet.js + Google Maps API | Interactive overlays + geocoding/static maps |
-| Visual style | Dark Atlas | Dark theme (#0f0f0f), golden accent (#f5c842), matches existing briefs |
-| Routing | Nested with flat fallback | Best mobile UX (validated by 4 independent evaluations) |
+| Database | PocketBase (port 8090) | Simple, self-contained, real-time capable |
+| Maps | Leaflet.js + Google Maps Geocoding API | Interactive overlays + geocoding |
+| Map tiles | CartoDB Dark Matter (free, no key) | Dark aesthetic, no API key needed |
+| Visual style | Dark Atlas | Dark bg (#0f0f0f / 0 0% 6%), golden accent (#f5c842 / 43 91% 61%) |
+| Routing | Nested under /explore prefix, flat /brief | Best mobile UX + no route collisions |
 | AI fallback | Claude API (Sonnet) | For generating briefs in un-seeded locations |
 | Pre-seeded data | China (7 cities), Turkey (Istanbul) | User's travel priorities |
 
@@ -29,12 +31,13 @@ A phone-first web app with three standalone experiences — country, city, and a
 │  React + Vite + Tailwind + Leaflet.js        │
 │  Dark Atlas theme, phone-first               │
 │                                              │
+│  Router: React Router v6                     │
 │  Routes:                                     │
-│    /                    Landing               │
-│    /:country            Country experience    │
-│    /:country/:city      City experience       │
-│    /:country/:city/brief/:id  Address brief   │
-│    /brief/:id           AI-generated brief    │
+│    /                              Landing     │
+│    /explore/:country              Country     │
+│    /explore/:country/:city        City        │
+│    /explore/:country/:city/brief/:id  Brief   │
+│    /brief/:id              AI-generated brief │
 └──────────────┬──────────────────────────────┘
                │ API calls
 ┌──────────────▼──────────────────────────────┐
@@ -44,6 +47,7 @@ A phone-first web app with three standalone experiences — country, city, and a
 │  Endpoints:                                  │
 │    GET  /api/countries                       │
 │    GET  /api/countries/:slug                 │
+│    GET  /api/countries/:slug/cities           │
 │    GET  /api/cities/:slug                    │
 │    POST /api/geocode        (proxies Google) │
 │    POST /api/brief/generate (calls Claude)   │
@@ -75,16 +79,16 @@ Three entry points presented clearly:
 
 Search bar at top for direct access. Pre-seeded countries/cities shown as browseable cards below.
 
-### Country Experience (`/:country`)
+### Country Experience (`/explore/:country`)
 
 Standalone page with:
 - Country map (Leaflet) highlighting key regions/cities
 - Quick facts (visa, currency, language, best time to visit)
 - Geographic overview (regions, distances, terrain)
-- City cards linking to `/:country/:city`
+- City cards linking to `/explore/:country/:city`
 - Content depth: enough to orient a first-time visitor, less detail than city level
 
-### City Experience (`/:country/:city`)
+### City Experience (`/explore/:country/:city`)
 
 Standalone page with:
 - City map (Leaflet) with colored district/zone overlays
@@ -93,7 +97,7 @@ Standalone page with:
 - "Get Your Brief" section: address input → geocode → generate orientation brief
 - Pre-seeded zone data for known cities
 
-### Address Brief (`/:country/:city/brief/:id` or `/brief/:id`)
+### Address Brief (`/explore/:country/:city/brief/:id` or `/brief/:id`)
 
 The core orientation deliverable:
 - Interactive Leaflet map with zone overlays (replacing static Google Maps image)
@@ -101,8 +105,9 @@ The core orientation deliverable:
 - Color-coded legend with zone types
 - Orientation brief (mental model, navigation tips, recommendations)
 - Zone cards with details
-- Share button (URL is the share mechanism)
-- Download option
+- Share button (copy URL to clipboard)
+
+For AI-generated briefs in un-seeded locations, the flat `/brief/:id` route is used.
 
 ### Navigation
 
@@ -110,6 +115,7 @@ The core orientation deliverable:
 - Back button maps naturally to breadcrumb hierarchy
 - Cross-links between sibling cities within a country
 - Consistent top bar with search + breadcrumbs
+- All content routes under `/explore/` prefix to avoid collisions with future top-level routes
 
 ## Data Model
 
@@ -141,7 +147,10 @@ The core orientation deliverable:
 - `note`: string
 
 ### briefs
-- `id`: string (nanoid)
+
+Zone data is copied into each brief's `zones` JSON field so briefs are self-contained and shareable. For pre-seeded cities, zones are copied from the `zones` collection at generation time. For AI-generated briefs, zones exist only in the brief's JSON and are never written to the `zones` collection.
+
+- `id`: string (nanoid(12) — short for URL-friendly sharing)
 - `anchor_name`: string
 - `anchor_lat`: number
 - `anchor_lng`: number
@@ -161,38 +170,63 @@ The core orientation deliverable:
 | food | `#e07c28` | Food-heavy |
 | coffee | `#9b59b6` | Coffee / work |
 | explore | `#4488e8` | Worth exploring |
-| anchor | `#1a1a1a` | Your base |
+| anchor | `#f5c842` | Your base |
 
 ## API Endpoints
 
 ### GET /api/countries
-Returns all pre-seeded countries with basic info for cards.
+Returns: `{ countries: CountryCard[] }`
+```ts
+type CountryCard = { name: string; slug: string; map_center: {lat: number; lng: number}; map_zoom: number }
+```
 
 ### GET /api/countries/:slug
-Returns full country data including overview, quick facts, and list of cities.
+Returns: `{ country: CountryDetail }`
+```ts
+type CountryDetail = CountryCard & { overview: string; quick_facts: QuickFacts; cities: CityCard[] }
+```
+
+### GET /api/countries/:slug/cities
+Returns: `{ cities: CityCard[] }`
+```ts
+type CityCard = { name: string; slug: string; country_slug: string; map_center: {lat: number; lng: number}; map_zoom: number }
+```
 
 ### GET /api/cities/:slug
-Returns full city data including overview, zones, and map config.
+Returns: `{ city: CityDetail }`
+```ts
+type CityDetail = CityCard & { overview: string; zones: Zone[] }
+```
 
 ### POST /api/geocode
 Body: `{ address: string }`
-Proxies to Google Geocoding API. Returns `{ lat, lng, formatted_address }`.
+Returns: `{ lat: number; lng: number; formatted_address: string }`
+Proxies to Google Geocoding API. On failure: `{ error: "Could not find that address" }` with 404.
 
 ### POST /api/brief/generate
-Body: `{ lat, lng, anchor_name, city_slug? }`
-For pre-seeded cities: looks up zones from PocketBase, generates brief template.
-For un-seeded locations: calls Claude API (Sonnet) to research the area and generate zones + brief.
-Returns the created brief with ID.
+Body: `{ lat: number; lng: number; anchor_name: string; city_slug?: string }`
+For pre-seeded cities: copies zones from PocketBase, generates brief template.
+For un-seeded locations: calls Claude API (Sonnet) to generate zones + brief.
+Returns: `{ brief: BriefDetail }`
+On Claude API timeout (30s): `{ error: "Generation timed out, please try again" }` with 504.
 
 ### GET /api/brief/:id
-Returns a saved brief by ID (for sharing).
+Returns: `{ brief: BriefDetail }`
+```ts
+type BriefDetail = {
+  id: string; anchor_name: string; anchor_lat: number; anchor_lng: number;
+  city_slug: string | null; country_slug: string | null;
+  zones: Zone[]; brief_markdown: string; generated_by: "seeded" | "ai"; created_at: string
+}
+```
+On not found: `{ error: "Brief not found" }` with 404.
 
 ## Tech Details
 
 ### Google Maps API
 - Key stored in `.env` as `GOOGLE_MAPS_API_KEY`
 - All calls proxied through Express — never exposed to frontend
-- Used for: geocoding addresses, static map thumbnails
+- Used for: geocoding addresses only (Leaflet replaces static map images)
 
 ### Claude API
 - Key stored in `.env` as `ANTHROPIC_API_KEY`
@@ -204,12 +238,22 @@ Returns a saved brief by ID (for sharing).
 - Renders interactive maps on country, city, and brief pages
 - GeoJSON overlays for zone polygons (circles/polygons)
 - Click handlers: tap zone → open Google Maps link
-- Tile layer: dark-themed map tiles to match Dark Atlas visual style
+- Tile layer: CartoDB Dark Matter (`https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png`) — free, no key
 
 ### PocketBase
-- Runs as a separate process alongside Express
-- SDK used from Express to query/write data
-- Pre-seeded via migration script with China + Turkey data
+- Runs on port 8090 as a separate process
+- Express connects via `POCKETBASE_URL` env var (default `http://127.0.0.1:8090`)
+- Dev script: `"dev:db": "pocketbase serve --dir=./pb_data"` in package.json
+- Pre-seeded via standalone Node script (`server/seed.ts`) that populates collections
+- PocketBase admin UI available at `http://localhost:8090/_/` for content inspection
+
+## Error & Loading States
+
+- **Geocode failure**: inline error "Could not find that address" below the input
+- **Brief generation loading**: skeleton UI with progress message ("Generating your orientation brief..."), estimated 5-10s for AI
+- **Claude API timeout**: 30s limit, shows "Generation timed out, please try again" with retry button
+- **Invalid country/city slug**: 404 page with "Place not found" and link back to landing
+- **Rate limiting**: 10 requests/minute on `POST /api/brief/generate` per IP
 
 ## Pre-seeded Cities
 
@@ -241,7 +285,7 @@ Returns a saved brief by ID (for sharing).
 
 ### Phase 2 (future)
 - Country content depth refinement
-- Save/share briefs
+- Social sharing buttons, copy-to-clipboard, favorites list
 - More pre-seeded countries/cities
 - Offline caching
 
