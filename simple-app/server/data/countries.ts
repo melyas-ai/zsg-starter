@@ -33,7 +33,7 @@ The best time to visit most of the country is spring (April–May) and autumn (S
       timezone: "China Standard Time (CST, UTC+8) — single timezone nationwide",
       best_time: "April–May and September–October",
     },
-    map_center: { lat: 35.86, lng: 104.20 },
+    map_center: { lat: 31.50, lng: 112.00 },
     map_zoom: 4,
   },
   {

@@ -79,6 +79,16 @@ The city is the home of Chongqing hotpot, China's most unapologetically pungent 
     map_zoom: 12,
   },
   {
+    name: "Hangzhou",
+    slug: "hangzhou",
+    country_slug: "china",
+    overview: `Hangzhou is one of China's most celebrated cities, famously described in the Song dynasty proverb "Above there is heaven, below there are Suzhou and Hangzhou." The city's defining feature is West Lake (Xī Hú), a UNESCO World Heritage landscape of causeways, pagodas, islands, and willow-lined shores that has inspired Chinese poets and painters for over a thousand years. The lake is genuinely beautiful — not just historically significant — and the surrounding hills, temples, and tea plantations give Hangzhou a softer, more meditative atmosphere than the hyperkinetic commercial capitals of the coast.
+
+Hangzhou is also the birthplace of Longjing (Dragon Well) green tea, considered China's finest. The terraced tea fields above the village of Longjing are walkable and atmospheric, and the local tradition of hand-roasting leaves continues in family-run operations. The city's food scene draws on Zhejiang cuisine (light, fresh, subtly sweet) — Dongpo pork, beggar's chicken, and West Lake vinegar fish are signatures. As the headquarters of Alibaba, Hangzhou is possibly the most cashless city on earth: QR code payments work everywhere, from Michelin-starred restaurants to temple donation boxes. The metro is clean and well-signed, and the city's public bike-share was one of the world's first.`,
+    map_center: { lat: 30.2590, lng: 120.1530 },
+    map_zoom: 13,
+  },
+  {
     name: "Istanbul",
     slug: "istanbul",
     country_slug: "turkey",

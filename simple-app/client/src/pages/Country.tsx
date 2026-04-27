@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { getCountry } from "../lib/api";
 import { renderMarkdown } from "../lib/markdown";
 import type { CountryDetail } from "../lib/types";
@@ -11,6 +11,7 @@ import NotFound from "../components/NotFound";
 
 export default function Country() {
   const { country: slug } = useParams<{ country: string }>();
+  const navigate = useNavigate();
   const [country, setCountry] = useState<CountryDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -24,10 +25,20 @@ export default function Country() {
       .finally(() => setLoading(false));
   }, [slug]);
 
+  const handleCityClick = useCallback((citySlug: string) => {
+    navigate(`/explore/${slug}/${citySlug}`);
+  }, [navigate, slug]);
+
   if (loading) return <LoadingSkeleton />;
   if (notFound || !country) return <NotFound />;
 
   const facts = country.quick_facts;
+  const cityMarkers = country.cities.map((c) => ({
+    lat: c.map_center.lat,
+    lng: c.map_center.lng,
+    name: c.name,
+    slug: c.slug,
+  }));
 
   return (
     <div className="space-y-6 pt-2">
@@ -50,7 +61,13 @@ export default function Country() {
         ))}
       </div>
 
-      <ZoneMap center={country.map_center} zoom={country.map_zoom} zones={[]} />
+      <ZoneMap
+        center={country.map_center}
+        zoom={country.map_zoom}
+        zones={[]}
+        cityMarkers={cityMarkers}
+        onCityClick={handleCityClick}
+      />
 
       <div
         className="prose prose-invert prose-sm max-w-none text-muted-foreground [&_strong]:text-foreground"

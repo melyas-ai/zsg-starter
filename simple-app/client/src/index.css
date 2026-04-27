@@ -85,6 +85,43 @@
   }
 }
 
+.zone-label {
+  background: rgba(15, 15, 15, 0.85) !important;
+  border: 1px solid rgba(245, 200, 66, 0.4) !important;
+  color: #f5f5f5 !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5) !important;
+}
+
+.city-label {
+  background: rgba(15, 15, 15, 0.9) !important;
+  border: 1px solid rgba(245, 200, 66, 0.6) !important;
+  color: #f5c842 !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 3px 8px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5) !important;
+}
+
+.anchor-label {
+  background: rgba(245, 200, 66, 0.95) !important;
+  border: none !important;
+  color: #0f0f0f !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  padding: 3px 8px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
+}
+
+.leaflet-tooltip-pane {
+  z-index: 650 !important;
+}
+
 /**
  * Using the elevate system.
  * Automatic contrast adjustment.
