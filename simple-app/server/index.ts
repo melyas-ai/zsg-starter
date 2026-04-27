@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: false }));
     serveStatic(app);
   }
 
-  server.listen(PORT, () => {
+  server.listen(PORT, "0.0.0.0", () => {
     log(`serving on port ${PORT}`);
   });
 })();
