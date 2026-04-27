@@ -138,6 +138,118 @@ Hangzhou is also the birthplace of Longjing (Dragon Well) green tea, considered 
     map_zoom: 13,
   },
   {
+    name: "Xi'an",
+    slug: "xian",
+    country_slug: "china",
+    highlights: [
+      "Terracotta Warriors are 45 min by bus from the city — book a half-day, go early to beat tour groups",
+      "The Muslim Quarter (Huimin Jie) has the best street food in China — lamb skewers, roujiamo, biang biang noodles",
+      "Cycling the full 14km ancient city wall takes about 90 minutes — rent a bike at any gate",
+      "Xi'an is the eastern terminus of the Silk Road and the starting point for many Silk Road-themed trips west",
+    ],
+    overview: `Xi'an served as the capital of thirteen Chinese dynasties and is one of the most historically significant cities in the world. It was the eastern anchor of the Silk Road, and for over a thousand years one of the most important cities on earth. The Terracotta Warriors — an underground army of 8,000 life-sized figures buried with the first emperor Qin Shi Huang in 210 BCE — remain one of archaeology's most astonishing discoveries.
+
+The city itself rewards exploration beyond the warriors. The intact Ming-dynasty city wall (one of the best-preserved in China) is wide enough to cycle on and encloses a grid of streets centered on the Bell and Drum Towers. The Muslim Quarter, home to the city's Hui community for centuries, is a sensory overload of halal street food — lamb skewers, roujiamo (Chinese hamburger), hand-pulled biang biang noodles, and persimmon cakes. Xi'an's food scene alone justifies a visit. High-speed rail connects to Beijing (4.5 hours), Chengdu (3 hours), and Shanghai (6 hours).`,
+    map_center: { lat: 34.2658, lng: 108.9541 },
+    map_zoom: 13,
+  },
+  {
+    name: "Chengdu",
+    slug: "chengdu",
+    country_slug: "china",
+    highlights: [
+      "Giant Panda Breeding Base: arrive at opening (7:30am) — pandas are active in the morning and hide by noon",
+      "Sichuan food is the spiciest in China — say 微辣 (wēi là, 'mild spice') if you're not ready for full heat",
+      "Teahouse culture is the social fabric — People's Park teahouse is the best place to watch local life unfold",
+      "Gateway to western Sichuan's mountains and Tibetan plateau — Kangding and Jiuzhaigou accessible by bus",
+    ],
+    overview: `Chengdu is the capital of Sichuan province and one of China's most liveable cities, famous for a laid-back culture that stands in sharp contrast to the hustle of the eastern seaboard. The city is best known internationally as the home of the giant panda, but residents will tell you the real identity is food: Sichuan cuisine, built on the numbing-spicy combination of Sichuan peppercorn and dried chili, is arguably China's most complex and addictive culinary tradition. Hotpot, mapo tofu, dan dan noodles, and kung pao chicken all originate here.
+
+The teahouse tradition runs deep — the bamboo-chair teahouses in People's Park and along the Jin River are where Chengdu's social life happens, with ear-cleaning services, mahjong, and endless refills of jasmine tea. The Jinli and Kuanzhai Xiangzi historic lanes are tourist-oriented but atmospheric, and the surrounding Wuhou district has excellent local restaurants. Chengdu is also the primary gateway to western Sichuan's extraordinary mountain landscapes, Tibetan communities, and Jiuzhaigou National Park.`,
+    map_center: { lat: 30.5728, lng: 104.0668 },
+    map_zoom: 12,
+  },
+  {
+    name: "Guilin & Yangshuo",
+    slug: "guilin",
+    country_slug: "china",
+    highlights: [
+      "Li River cruise from Guilin to Yangshuo (4-5 hours) is one of China's most scenic journeys — book in advance",
+      "Yangshuo is the real base — better food, cheaper accommodation, and karst scenery right outside your door",
+      "Rent an e-bike in Yangshuo to explore the countryside — Yulong River bamboo rafting is quieter than the Li",
+      "Cormorant fishing at dusk is staged for tourists but genuinely atmospheric — worth seeing once",
+    ],
+    overview: `The Guilin-Yangshuo corridor in Guangxi province contains some of the most iconic landscapes in China: thousands of karst limestone pinnacles rising from flat rice paddies and winding rivers, a scenery so distinctive it appears on the 20 yuan banknote. The Li River cruise from Guilin to Yangshuo passes through the heart of this landscape and is one of the country's great travel experiences.
+
+Guilin is the transport hub (airport, high-speed rail) but Yangshuo, a small town 65km downstream, is where most travelers base themselves. The surrounding countryside is best explored by e-bike or bicycle — the Yulong River valley, Ten-Mile Gallery, and surrounding villages offer karst scenery without the cruise-boat crowds. Rock climbing has developed here into one of Asia's top climbing destinations. The local food centers on Guilin rice noodles (mifen) — a breakfast-to-midnight staple available everywhere.`,
+    map_center: { lat: 24.9384, lng: 110.3738 },
+    map_zoom: 11,
+  },
+  {
+    name: "Kunming",
+    slug: "kunming",
+    country_slug: "china",
+    highlights: [
+      "Called 'Spring City' — temperatures hover around 15-25°C year-round, perfect escape from summer heat",
+      "Gateway to Yunnan's diversity: Dali, Lijiang, and Shangri-La are all reachable by train or bus",
+      "Crossing-the-bridge noodles (过桥米线) is the signature dish — try it at Jianxin Garden for the classic version",
+      "Stone Forest (Shilin) is 90 min by bus — impressive karst formations, go on weekdays to avoid crowds",
+    ],
+    overview: `Kunming is the capital of Yunnan, China's most ethnically and geographically diverse province. Known as the "Spring City" for its mild year-round climate, Kunming sits at 1,900 meters on a fertile plateau surrounded by mountains, giving it a freshness that makes it a welcome contrast to China's often sweltering or freezing major cities.
+
+The city itself is pleasant rather than spectacular — Green Lake Park, the Bird & Flower Market, and Yuantong Temple are worth a morning each. But Kunming's real value is as a gateway: Yunnan province stretches from tropical borders with Laos and Myanmar in the south to Tibetan highlands in the northwest, and Kunming is the transport hub connecting it all. Dali (3 hours by train), Lijiang (4 hours), and the Stone Forest karst landscape (90 minutes by bus) are the most popular side trips. Yunnan cuisine emphasizes fresh ingredients, wild mushrooms, and rice noodles — crossing-the-bridge noodles (过桥米线) is the unmissable local specialty.`,
+    map_center: { lat: 25.0389, lng: 102.7183 },
+    map_zoom: 12,
+  },
+  {
+    name: "Lijiang",
+    slug: "lijiang",
+    country_slug: "china",
+    highlights: [
+      "Old Town is a UNESCO site but extremely touristy — stay in Shuhe or Baisha for a quieter experience",
+      "Jade Dragon Snow Mountain (5,596m) is a day trip — cable car to 4,506m, no climbing experience needed",
+      "Tiger Leaping Gorge is one of the world's great hikes — 2 days, book a guesthouse on the high trail",
+      "Altitude is 2,400m — take it easy the first day, drink water, skip alcohol for the first night",
+    ],
+    overview: `Lijiang is an ancient Naxi-culture town in northwest Yunnan, set at 2,400 meters against the backdrop of Jade Dragon Snow Mountain (5,596m). The Old Town, a UNESCO World Heritage site of cobblestone lanes, wooden bridges, and flowing canals, is one of the most photogenic historic towns in China — though it has become heavily commercialized with bars, souvenir shops, and tourist crowds.
+
+The real draw is the surrounding landscape. Tiger Leaping Gorge, a two-day trek through one of the world's deepest river canyons, is among China's best hikes. Jade Dragon Snow Mountain can be reached by cable car to 4,506m for non-climbers. The smaller villages of Shuhe and Baisha, both within cycling distance of Lijiang, preserve more of the traditional Naxi atmosphere. The Dongba culture — with its unique pictographic script — is still practiced by elderly Naxi shamans. High-speed rail from Kunming takes about 3.5 hours.`,
+    map_center: { lat: 26.8721, lng: 100.2299 },
+    map_zoom: 13,
+  },
+  {
+    name: "Suzhou",
+    slug: "suzhou",
+    country_slug: "china",
+    highlights: [
+      "Classical gardens are UNESCO-listed — Humble Administrator's Garden and Lingering Garden are the must-sees",
+      "30 min from Shanghai by high-speed rail — perfect day trip or overnight",
+      "Pingjiang Road canal walk is the best-preserved historic street — skip the tourist boats, walk instead",
+      "Suzhou silk has been prized for 2,000 years — the Silk Museum is free and genuinely interesting",
+    ],
+    overview: `Suzhou has been celebrated as a garden city for over a thousand years — the classical Chinese gardens here, nine of which are UNESCO World Heritage sites, represent the pinnacle of Chinese landscape design. Unlike the grand imperial gardens of Beijing, Suzhou's gardens are intimate private retreats: scholars' retreats built behind courtyard walls, using rocks, water, plants, and architecture to create miniature landscapes that embody philosophical ideals.
+
+The Humble Administrator's Garden and Lingering Garden are the most famous, but smaller gardens like the Master of the Nets Garden (especially its evening performance) offer a more contemplative experience. Beyond gardens, Suzhou's canal-threaded old town along Pingjiang Road preserves a sense of the water-town culture that once defined the Yangtze delta. The city is also synonymous with silk production and has a distinctive cuisine emphasizing freshwater fish and subtle sweetness. At just 30 minutes from Shanghai by high-speed rail, Suzhou works as a day trip but rewards an overnight stay.`,
+    map_center: { lat: 31.2990, lng: 120.5853 },
+    map_zoom: 13,
+  },
+  {
+    name: "Dali",
+    slug: "dali",
+    country_slug: "china",
+    highlights: [
+      "Erhai Lake is best explored by e-bike — the 120km loop takes a full day with stops for Bai villages",
+      "Bai ethnic cuisine is distinct from the rest of Yunnan — try rushan (milk fan cheese) and erkuai rice cakes",
+      "Old Town is touristy but Xizhou and Shaxi (2 hours north) are the quieter, more authentic alternatives",
+      "Altitude is 2,000m with strong UV — sunscreen and sunglasses essential even on cloudy days",
+    ],
+    overview: `Dali is a small city in western Yunnan set between Erhai Lake and the Cangshan mountain range (peaks to 4,122m), home to the Bai ethnic minority whose distinctive white architecture, dairy-based cuisine, and tie-dye traditions give the area a cultural flavor quite different from Han Chinese mainstream.
+
+The Old Town, rebuilt after an earthquake, has become a well-established backpacker and digital-nomad hub — cafes, guesthouses, and small bars are plentiful. The real character lies outside the walls: Xizhou, a Bai market town on the lake's north shore, has better-preserved traditional architecture and a legendary morning market. The Erhai Lake circuit by e-bike passes through farming villages, temples, and shoreline wetlands. Dali is quieter and more contemplative than Lijiang, and many travelers who visit both prefer it. Three Pagodas temple complex and the Cangshan mountain cable car are the main structured attractions.`,
+    map_center: { lat: 25.6065, lng: 100.2676 },
+    map_zoom: 13,
+  },
+  {
     name: "Istanbul",
     slug: "istanbul",
     country_slug: "turkey",
