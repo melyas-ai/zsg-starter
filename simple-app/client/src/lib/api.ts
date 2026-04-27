@@ -41,6 +41,30 @@ export async function geocode(address: string): Promise<{ lat: number; lng: numb
   });
 }
 
+export interface PlacePrediction {
+  place_id: string;
+  description: string;
+  main_text: string;
+  secondary_text: string;
+}
+
+export async function placesAutocomplete(
+  input: string,
+  location?: { lat: number; lng: number }
+): Promise<PlacePrediction[]> {
+  const params = new URLSearchParams({ input });
+  if (location) {
+    params.set("lat", String(location.lat));
+    params.set("lng", String(location.lng));
+  }
+  const data = await fetchJson<{ predictions: PlacePrediction[] }>(`/places/autocomplete?${params}`);
+  return data.predictions;
+}
+
+export async function placeDetails(placeId: string): Promise<{ lat: number; lng: number; formatted_address: string }> {
+  return fetchJson(`/places/details?place_id=${placeId}`);
+}
+
 export async function generateBrief(params: {
   lat: number; lng: number; anchor_name: string; city_slug?: string;
 }): Promise<BriefDetail> {

@@ -4,6 +4,7 @@ import countriesRouter from "./routes/countries";
 import citiesRouter from "./routes/cities";
 import geocodeRouter from "./routes/geocode";
 import briefsRouter from "./routes/briefs";
+import placesRouter from "./routes/places";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/health", async (_req, res) => {
@@ -14,6 +15,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use("/api/cities", citiesRouter);
   app.use("/api/geocode", geocodeRouter);
   app.use("/api/brief", briefsRouter);
+  app.use("/api/places", placesRouter);
 
   return createServer(app);
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getCity, getCities, geocode, generateBrief } from "../lib/api";
+import { getCity, getCities, generateBrief } from "../lib/api";
 import { renderMarkdown } from "../lib/markdown";
 import type { CityDetail, CityCard as CityCardType } from "../lib/types";
 import Breadcrumbs from "../components/Breadcrumbs";
@@ -8,7 +8,7 @@ import ZoneMap from "../components/ZoneMap";
 import ZoneLegend from "../components/ZoneLegend";
 import ZoneCard from "../components/ZoneCard";
 import CityCard from "../components/CityCard";
-import SearchBar from "../components/SearchBar";
+import AddressSearch from "../components/AddressSearch";
 import LoadingSkeleton from "../components/LoadingSkeleton";
 import NotFound from "../components/NotFound";
 
@@ -37,15 +37,14 @@ export default function City() {
       .finally(() => setLoading(false));
   }, [citySlug, countrySlug]);
 
-  async function handleBriefSearch(address: string) {
+  async function handleConfirm(location: { lat: number; lng: number; formatted_address: string }) {
     setBriefLoading(true);
     setBriefError("");
     try {
-      const geo = await geocode(address);
       const brief = await generateBrief({
-        lat: geo.lat,
-        lng: geo.lng,
-        anchor_name: geo.formatted_address,
+        lat: location.lat,
+        lng: location.lng,
+        anchor_name: location.formatted_address,
         city_slug: citySlug,
       });
       navigate(`/explore/${countrySlug}/${citySlug}/brief/${brief.id}`);
@@ -113,15 +112,13 @@ export default function City() {
         <p className="text-sm text-muted-foreground">
           Search any place, hotel, or neighborhood in {city.name}
         </p>
-        <SearchBar
-          onSearch={handleBriefSearch}
+        <AddressSearch
+          onConfirm={handleConfirm}
           placeholder={'Try "hotel name" or "landmark, neighborhood"...'}
           loading={briefLoading}
           error={briefError}
+          biasLocation={city.map_center}
         />
-        {briefLoading && (
-          <p className="text-sm text-muted-foreground animate-pulse">Generating your orientation brief...</p>
-        )}
       </div>
 
       {siblings.length > 0 && (

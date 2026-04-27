@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCountries, geocode, generateBrief } from "../lib/api";
+import { getCountries, generateBrief } from "../lib/api";
 import type { CountryCard as CountryCardType } from "../lib/types";
 import CountryCard from "../components/CountryCard";
-import SearchBar from "../components/SearchBar";
+import AddressSearch from "../components/AddressSearch";
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -15,15 +15,14 @@ export default function Landing() {
     getCountries().then(setCountries).catch(() => {});
   }, []);
 
-  async function handleSearch(address: string) {
+  async function handleConfirm(location: { lat: number; lng: number; formatted_address: string }) {
     setLoading(true);
     setError("");
     try {
-      const geo = await geocode(address);
       const brief = await generateBrief({
-        lat: geo.lat,
-        lng: geo.lng,
-        anchor_name: geo.formatted_address,
+        lat: location.lat,
+        lng: location.lng,
+        anchor_name: location.formatted_address,
       });
       navigate(`/brief/${brief.id}`);
     } catch (e) {
@@ -43,10 +42,7 @@ export default function Landing() {
       <div className="bg-card border border-border rounded-lg p-6 space-y-3">
         <h2 className="text-lg font-semibold text-foreground">Orient Me</h2>
         <p className="text-sm text-muted-foreground">Search any address, hotel, landmark, or neighborhood</p>
-        <SearchBar onSearch={handleSearch} placeholder={'Try "Hilton Istanbul" or "Shibuya, Tokyo"...'} loading={loading} error={error} />
-        {loading && (
-          <p className="text-sm text-muted-foreground animate-pulse">Generating your orientation brief...</p>
-        )}
+        <AddressSearch onConfirm={handleConfirm} loading={loading} error={error} />
       </div>
 
       {countries.length > 0 && (
