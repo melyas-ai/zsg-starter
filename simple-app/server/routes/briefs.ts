@@ -6,6 +6,18 @@ import { chatCompletion } from "../lib/llm";
 import { buildBriefPrompt } from "../lib/brief-prompt";
 import type { BriefDetail, Zone } from "../types";
 
+function extractJSON(text: string): Record<string, unknown> {
+  const cleaned = text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
+  try {
+    return JSON.parse(cleaned);
+  } catch {
+    // Greedy regex fallback
+    const match = cleaned.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error("No JSON found in LLM response");
+    return JSON.parse(match[0]);
+  }
+}
+
 const router = Router();
 
 const generateLimiter = rateLimit({
@@ -39,18 +51,16 @@ router.post("/generate", generateLimiter, async (req, res) => {
       }));
       const { systemPrompt, userPrompt } = buildBriefPrompt(lat, lng, anchor_name || "Your Location", zones);
       const result = await chatCompletion(systemPrompt, userPrompt, 2000);
-      const jsonMatch = result.text.match(/\{[\s\S]*\}/);
-      briefMarkdown = jsonMatch ? JSON.parse(jsonMatch[0]).brief_markdown : result.text;
+      const parsed = extractJSON(result.text);
+      briefMarkdown = (parsed.brief_markdown as string) || result.text;
       generatedBy = "seeded";
     } else {
       const { systemPrompt, userPrompt } = buildBriefPrompt(lat, lng, anchor_name || "Your Location");
       const result = await chatCompletion(systemPrompt, userPrompt, 4000);
-      const text = result.text;
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error("Failed to parse AI response");
-      const parsed = JSON.parse(jsonMatch[0]);
-      zones = parsed.zones;
-      briefMarkdown = parsed.brief_markdown;
+      const parsed = extractJSON(result.text);
+      zones = parsed.zones as Zone[];
+      briefMarkdown = parsed.brief_markdown as string;
+      if (!zones || !briefMarkdown) throw new Error("LLM response missing zones or brief_markdown");
       generatedBy = "ai";
     }
 
@@ -80,14 +90,14 @@ router.post("/generate", generateLimiter, async (req, res) => {
     res.json({ brief });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unknown error";
-    console.error("Brief generation error:", message);
+    console.error("Brief generation error:", message, e instanceof Error ? e.stack : "");
     if (message.includes("timeout") || message.includes("ETIMEDOUT") || message.includes("abort")) {
-      return res.status(504).json({ error: "Generation timed out, please try again" });
+      return res.status(504).json({ error: "Generation timed out — please try again" });
     }
     if (message.includes("not configured")) {
       return res.status(500).json({ error: "AI service not configured — set OPENROUTER_API_KEY in .env" });
     }
-    res.status(500).json({ error: "Failed to generate brief" });
+    res.status(500).json({ error: message });
   }
 });
 
