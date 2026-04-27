@@ -28,6 +28,7 @@ export interface QuickFacts {
 
 export interface CountryDetail extends CountryCard {
   overview: string;
+  highlights: string[];
   quick_facts: QuickFacts;
   cities: CityCard[];
 }
@@ -42,6 +43,7 @@ export interface CityCard {
 
 export interface CityDetail extends CityCard {
   overview: string;
+  highlights: string[];
   zones: Zone[];
 }
 

@@ -2,6 +2,7 @@ export interface CountryData {
   name: string;
   slug: string;
   overview: string;
+  highlights: string[];
   quick_facts: {
     visa: string;
     currency: string;
@@ -17,6 +18,13 @@ export const countries: CountryData[] = [
   {
     name: "China",
     slug: "china",
+    highlights: [
+      "High-speed rail (高铁) connects major cities in 2-4 hours — more reliable than domestic flights",
+      "VPN essential — Google, WhatsApp, Instagram all blocked on the mainland",
+      "WeChat Pay / Alipay required — many places no longer accept cash or foreign cards",
+      "Best time: April-May or September-October — avoid Golden Week (early Oct) and Chinese New Year",
+      "Single timezone (UTC+8) nationwide despite spanning 5 geographic zones",
+    ],
     overview: `China is the world's most populous country and the third largest by land area, stretching across East Asia from the Tibetan Plateau in the west to the Pacific coastline in the east. Its geography is extraordinarily diverse — towering mountain ranges, vast desert basins, subtropical river deltas, and over 14,500 km of coastline. The country divides loosely into three broad zones: the mountainous west including Tibet and Xinjiang; the central and northern plains dominated by the Yellow and Yangtze river systems; and the densely populated, economically dynamic eastern seaboard.
 
 Administratively, China comprises 23 provinces, 5 autonomous regions, 4 direct-controlled municipalities (Beijing, Shanghai, Tianjin, Chongqing), and 2 Special Administrative Regions (Hong Kong and Macau). Each region carries its own culinary tradition, dialect, and cultural identity, making "China" less a single destination than a continent-scale mosaic of experiences compressed into one political entity.
@@ -39,6 +47,13 @@ The best time to visit most of the country is spring (April–May) and autumn (S
   {
     name: "Turkey",
     slug: "turkey",
+    highlights: [
+      "e-Visa required for most nationalities — apply at evisa.gov.tr before you fly",
+      "Lira volatility means prices in tourist areas often quoted in EUR/USD — always confirm currency",
+      "Intercity buses are cheap and comfortable; domestic flights surprisingly affordable on Pegasus/AnadoluJet",
+      "Tipping ~10% at restaurants appreciated but not mandatory — round up for taxis",
+      "Best seasons: April-June and September-November — peak summer is 40C+ in the interior",
+    ],
     overview: `Turkey sits at the crossroads of Europe and Asia, a position that has shaped every aspect of its history, architecture, cuisine, and culture. The country spans two continents: a small northwestern strip (Thrace) lies in Europe, while the vast majority — Anatolia — occupies a large peninsula in western Asia. This geographic pivot point made Turkey the heart of successive empires: Hittite, Greek, Roman, Byzantine, and Ottoman, each leaving layers of monuments and cultural influence that are visible in virtually every major city.
 
 The landscape ranges from the snow-capped peaks of eastern Anatolia (home to Mount Ararat at 5,137 m) to the sun-bleached Aegean and Mediterranean coastlines. The interior plateau is largely semi-arid with hot summers and cold winters, while the Black Sea coast receives surprisingly heavy rainfall year-round. Cappadocia, in central Anatolia, offers one of the world's most surreal landscapes: soft volcanic rock eroded into fairy-tale spires and cave dwellings that have been inhabited for millennia.

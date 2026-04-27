@@ -36,6 +36,7 @@ router.get("/:slug", async (req, res) => {
       map_center: record.map_center,
       map_zoom: record.map_zoom,
       overview: record.overview,
+      highlights: record.highlights || [],
       quick_facts: record.quick_facts,
       cities,
     };

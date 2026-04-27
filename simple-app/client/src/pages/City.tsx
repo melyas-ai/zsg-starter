@@ -71,14 +71,33 @@ export default function City() {
 
       <h1 className="text-3xl font-bold text-foreground">{city.name}</h1>
 
+      {city.highlights && city.highlights.length > 0 && (
+        <div className="bg-card border border-border rounded-lg p-5 space-y-3">
+          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">Key Takeaways</h2>
+          <ul className="space-y-2">
+            {city.highlights.map((h, i) => (
+              <li key={i} className="flex items-start gap-3 text-sm text-foreground">
+                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                {h}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <ZoneMap center={city.map_center} zoom={city.map_zoom} zones={city.zones} />
 
       <ZoneLegend zones={city.zones} />
 
-      <div
-        className="prose prose-invert prose-sm max-w-none text-muted-foreground [&_strong]:text-foreground"
-        dangerouslySetInnerHTML={{ __html: renderMarkdown(city.overview) }}
-      />
+      <details className="group">
+        <summary className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+          More details
+        </summary>
+        <div
+          className="prose prose-invert prose-sm max-w-none text-muted-foreground/80 [&_strong]:text-foreground mt-3"
+          dangerouslySetInnerHTML={{ __html: renderMarkdown(city.overview) }}
+        />
+      </details>
 
       <div className="space-y-3">
         <h2 className="text-xl font-semibold text-foreground">Districts</h2>
@@ -96,7 +115,7 @@ export default function City() {
         </p>
         <SearchBar
           onSearch={handleBriefSearch}
-          placeholder={`Try "my hotel name" or "Taksim Square"...`}
+          placeholder={'Try "hotel name" or "landmark, neighborhood"...'}
           loading={briefLoading}
           error={briefError}
         />

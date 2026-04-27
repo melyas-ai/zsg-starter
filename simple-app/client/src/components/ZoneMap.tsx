@@ -32,20 +32,26 @@ export default function ZoneMap({ center, zoom, zones, anchor, cityMarkers, onCi
       attributionControl: false,
     });
 
+    const zonesPane = map.createPane("zones");
+    zonesPane.style.zIndex = "350";
+
     L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", {
       maxZoom: 19,
     }).addTo(map);
 
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png", {
-      maxZoom: 19,
-      pane: "overlayPane",
-    }).addTo(map);
+    if (!cityMarkers || cityMarkers.length === 0) {
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png", {
+        maxZoom: 19,
+        pane: "overlayPane",
+      }).addTo(map);
+    }
 
     L.control.attribution({ position: "bottomright", prefix: false }).addTo(map);
 
     zones.forEach((zone) => {
       const radiusMeters = zone.radius_deg * 111000;
       const circle = L.circle([zone.center_lat, zone.center_lng], {
+        pane: "zones",
         radius: radiusMeters,
         color: zone.color,
         fillColor: zone.color,

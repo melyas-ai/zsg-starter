@@ -25,6 +25,7 @@ router.get("/:slug", async (req, res) => {
       map_center: record.map_center,
       map_zoom: record.map_zoom,
       overview: record.overview,
+      highlights: record.highlights || [],
       zones,
     };
     res.json({ city });

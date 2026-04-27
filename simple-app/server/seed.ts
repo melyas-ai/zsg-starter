@@ -41,6 +41,7 @@ async function seed() {
     { name: "name", type: "text", required: true },
     { name: "slug", type: "text", required: true },
     { name: "overview", type: "text", required: true },
+    { name: "highlights", type: "json", required: true },
     { name: "quick_facts", type: "json", required: true },
     { name: "map_center", type: "json", required: true },
     { name: "map_zoom", type: "number", required: true },
@@ -51,6 +52,7 @@ async function seed() {
     { name: "slug", type: "text", required: true },
     { name: "country_slug", type: "text", required: true },
     { name: "overview", type: "text", required: true },
+    { name: "highlights", type: "json", required: true },
     { name: "map_center", type: "json", required: true },
     { name: "map_zoom", type: "number", required: true },
   ]);

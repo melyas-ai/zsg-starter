@@ -61,6 +61,20 @@ export default function Country() {
         ))}
       </div>
 
+      {country.highlights && country.highlights.length > 0 && (
+        <div className="bg-card border border-border rounded-lg p-5 space-y-3">
+          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wider">Key Takeaways</h2>
+          <ul className="space-y-2">
+            {country.highlights.map((h, i) => (
+              <li key={i} className="flex items-start gap-3 text-sm text-foreground">
+                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                {h}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <ZoneMap
         center={country.map_center}
         zoom={country.map_zoom}
@@ -69,10 +83,15 @@ export default function Country() {
         onCityClick={handleCityClick}
       />
 
-      <div
-        className="prose prose-invert prose-sm max-w-none text-muted-foreground [&_strong]:text-foreground"
-        dangerouslySetInnerHTML={{ __html: renderMarkdown(country.overview) }}
-      />
+      <details className="group">
+        <summary className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+          More details
+        </summary>
+        <div
+          className="prose prose-invert prose-sm max-w-none text-muted-foreground/80 [&_strong]:text-foreground mt-3"
+          dangerouslySetInnerHTML={{ __html: renderMarkdown(country.overview) }}
+        />
+      </details>
 
       {country.cities.length > 0 && (
         <div className="space-y-3">
