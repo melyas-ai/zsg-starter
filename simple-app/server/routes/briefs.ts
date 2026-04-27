@@ -7,14 +7,23 @@ import { buildBriefPrompt } from "../lib/brief-prompt";
 import type { BriefDetail, Zone } from "../types";
 
 function extractJSON(text: string): Record<string, unknown> {
-  const cleaned = text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
+  const stripped = text.replace(/```json\s*/g, "").replace(/```\s*/g, "").trim();
   try {
-    return JSON.parse(cleaned);
+    return JSON.parse(stripped);
   } catch {
-    // Greedy regex fallback
-    const match = cleaned.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error("No JSON found in LLM response");
-    return JSON.parse(match[0]);
+    // LLMs often put literal newlines/tabs inside JSON string values.
+    // Fix by escaping control chars only inside quoted strings.
+    const fixed = stripped.replace(/"(?:[^"\\]|\\.)*"/g, (match) =>
+      match.replace(/[\x00-\x1f\x7f]/g, (ch) => {
+        if (ch === "\n") return "\\n";
+        if (ch === "\r") return "\\r";
+        if (ch === "\t") return "\\t";
+        return "";
+      })
+    );
+    const jsonMatch = fixed.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error("No JSON found in LLM response");
+    return JSON.parse(jsonMatch[0]);
   }
 }
 
