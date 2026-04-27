@@ -7,13 +7,25 @@ const pb = new PocketBase(process.env.POCKETBASE_URL || "http://127.0.0.1:8090")
 
 async function createCollectionIfNotExists(name: string, fields: any[]) {
   try {
-    await pb.collections.getOne(name);
-    console.log(`Collection '${name}' already exists, skipping creation`);
+    const existing = await pb.collections.getOne(name);
+    if (!existing.listRule && existing.listRule !== "") {
+      await pb.collections.update(name, {
+        listRule: "",
+        viewRule: "",
+        createRule: "",
+      });
+      console.log(`Collection '${name}' already exists, updated API rules`);
+    } else {
+      console.log(`Collection '${name}' already exists, skipping creation`);
+    }
   } catch {
     await pb.collections.create({
       name,
       type: "base",
       fields,
+      listRule: "",
+      viewRule: "",
+      createRule: "",
     });
     console.log(`Created collection '${name}'`);
   }

@@ -12,3 +12,5 @@ volume/
 .env*.local
 pb_data/
 pocketbase
+bin/
+pb_migrations/
